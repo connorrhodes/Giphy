@@ -29,6 +29,17 @@
         }).done(function(response){
             console.log(response.data);
         });
+		function renderButtons() {
+		
+			$("#giphy-view").empty();
+			
+			for(var i = 0; i < giphys.length; i++){
+				
+				console.log(movies[i]);
+				
+				$("#giphy-view").append("<button>" + giphys[i] + "</button>");
+			};
+		}
 		$("#add-giphy").on("click", function (event) {
 		
 			event.preventDefault();
