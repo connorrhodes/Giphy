@@ -7,10 +7,21 @@
     <title>Document</title>
 </head>
 <body>
-
-    <script>
+	<form id="giphy-form">
+		<label for="giphy-input">Add a Giphy</label>
+		<input type="text" id="giphy-input"> <br>
+		
+		<input id="add-giphy" type="submit" value="Add a Giphy"> 
+		
+	</form>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    
+    <script type="text/javscript">
+		var giphys = [];
         //Giphy API Key: fztxG0KlQX7hLnL5u3Fkvo7kmHbyyDeq
-
+		var APIKey = "fztxG0KlQX7hLnL5u3Fkvo7kmHbyyDeq";
+		var queryURL = "" + APIKey;
+		var querySearch = "https://api.giphy.com/v1/gifs/search?api_key=" + APIKey +"&q=&limit=25&offset=0&rating=G&lang=en";
         $.ajax({
             url:queryURL,
             method: 'GET'
@@ -18,6 +29,21 @@
         }).done(function(response){
             console.log(response.data);
         });
+		$("#add-giphy").on("click", function (event) {
+		
+			event.preventDefault();
+			
+			var userInput = $("#giphy-input).val();
+			console.log(userInput);
+			
+			giphys.pushh(userInput);
+			console.log(giphys);
+			
+			renderButtons();
+		
+		});
+		
+		renderButtons();
     
     
     </script>
