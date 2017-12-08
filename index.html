@@ -3,20 +3,40 @@
 
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Giphy</title>
+  <!--reference style.css -->
+  <link rel="stylesheet" type="text/css" href="assets/css/styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <!--bootstrap-->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+    crossorigin="anonymous">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+    crossorigin="anonymous"></script>
+  <!--reference font awesome objects -->
+  <script src="https://use.fontawesome.com/ee4451749c.js"></script>
+  <!-- references -->
+
+
 </head>
 
 <body>
-  <div class="row text-center tag-row" id="buttons-view"></div>
-  <label for="search-input">Search for a giphy</label>
-  <input type="text" id="search-input">
-  <br>
+  <div class="container">
+    <div class="row text-center guide">
+      <h4>Search for your favorite giphy category and click</h4>
+    </div>
+    <div class="row text-center tag-row" id="buttons-view"></div>
+    <label for="search-input"></label>
 
-  <input id="add-giphy" type="submit" value="Giphy Search">
+    <br>
+  </div>
+  <input type="text" id="search-input">
+  <input class="btn" id="add-giphy" type="submit" value="Giphy Search">
+
   <div class="container">
     <div id="gifs-appear-here"></div>
   </div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
   <script type="text/javascript">
 
     var giphys = [];
@@ -125,6 +145,7 @@
     $(document).on("click", ".giph", displayGiphy);
     renderButtons();
   </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </body>
 
 </html>
