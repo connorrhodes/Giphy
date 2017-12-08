@@ -1,63 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-	<form id="giphy-form">
-		<label for="giphy-input">Add a Giphy</label>
-		<input type="text" id="giphy-input"> <br>
-		
-		<input id="add-giphy" type="submit" value="Add a Giphy"> 
-		
-	</form>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    
-    <script type="text/javscript">
-		var giphys = [];
-        //Giphy API Key: fztxG0KlQX7hLnL5u3Fkvo7kmHbyyDeq
-		var APIKey = "fztxG0KlQX7hLnL5u3Fkvo7kmHbyyDeq";
-		var queryURL = "" + APIKey;
-		var querySearch = "https://api.giphy.com/v1/gifs/search?api_key=" + APIKey +"&q=&limit=25&offset=0&rating=G&lang=en";
-        $.ajax({
-            url:queryURL,
-            method: 'GET'
 
-        }).done(function(response){
-            console.log(response.data);
-        });
-		function renderButtons() {
-		
-			$("#giphy-view").empty();
-			
-			for(var i = 0; i < giphys.length; i++){
-				
-				console.log(movies[i]);
-				
-				$("#giphy-view").append("<button>" + giphys[i] + "</button>");
-			};
-		}
-		$("#add-giphy").on("click", function (event) {
-		
-			event.preventDefault();
-			
-			var userInput = $("#giphy-input).val();
-			console.log(userInput);
-			
-			giphys.pushh(userInput);
-			console.log(giphys);
-			
-			renderButtons();
-		
-		});
-		
-		renderButtons();
-    
-    
-    </script>
-    
+<head>
+  <meta charset="utf-8">
+  <title>Giphy</title>
+</head>
+
+<body>
+  <div id="buttons-view">
+    <button data-name="cat">meow</button>
+    <button data-name="dog">woof</button>
+    <button data-name="bird">chirp</button>
+    <button data-name="falcon">Falcon</button>
+  </div>
+  <label for="search-input">Search for a giphy</label>
+  <input type="text" id="search-input">
+  <br>
+
+  <input id="add-giphy" type="submit" value="Giphy Search">
+  <div id="gifs-appear-here">
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript">
+
+    var giphys = [];
+    function renderButtons() {
+      $("#buttons-view").empty();
+
+      for (var i = 0; i < giphys.length; i++){
+
+        var a = $("<button>");
+
+        a.addClass("giph");
+        a.attr("data-name", giphys[i]);
+        a.text(giphys[i]);
+
+        $("#buttons-view").append(a);
+
+      }
+
+  }
+  $(".gif").on("click", function(){
+
+    var state = $(this).attr("data-state");
+    if(state === "still"){
+
+      var imgAnimate = $(this).attr("data-animate");
+      $(this).attr("src", imgAnimate);
+      $(this).attr("data-state", "animate");
+
+    } else {
+      var imgStill = $(this).attr("data-still");
+      $(this).attr("src", imgStill);
+      $(this).attr("data-state", "still");
+    }
+
+  });
+
+
+
+    $("#add-giphy").on("click", function (event) {
+
+      // Preventing the submit button from trying to submit the form
+      // We're optionally using a form so the user may hit Enter to search instead of clicking the button
+      //event.preventDefault();
+      var querySearch = "https://api.giphy.com/v1/gifs/search?api_key=fztxG0KlQX7hLnL5u3Fkvo7kmHbyyDeq&q=&limit=9&offset=0&rating=G&lang=en";
+      // Here we grab the text from the input box
+      var giphyS = $("#search-input").val();
+
+      var search = $("#search-input").val().trim();
+
+      giphys.push(giphyS);
+
+      //var searchDiv = $("<div class='search'>");
+        renderButtons();
+
+    });
+    function displayGiphy(){
+    $("button").on("click", function () {
+      var giphy = $(this).attr("data-name");
+      //Giphy API Key: fztxG0KlQX7hLnL5u3Fkvo7kmHbyyDeq
+      var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+        giphy + "&api_key=fztxG0KlQX7hLnL5u3Fkvo7kmHbyyDeq&limit=10";
+
+      $.ajax({
+        url: queryURL,
+        method: "GET"
+      }).done(function (response) {
+        // Step 1: Run this file, click a button, and see what the response object looks like in the browser's console.
+        // Open up the data key, then open up the 0th, element. Study the keys and how the JSON is structured.
+
+        console.log(response);
+
+        
+
+        var results = response.data;
+
+        // ========================
+
+        for (var i = 0; i < results.length; i++) {
+
+          
+          //var rating = results[i].rating;
+          // Make a div with jQuery and store it in a variable named animalDiv.
+          var giphyDiv = $("<div class='item'>");
+          // Make a paragraph tag with jQuery and store it in a variable named p.
+          //var p = $("<p>").text("Rating: " + rating);
+          // Set the inner text of the paragraph to the rating of the image in results[i].
+
+          // Make an image tag with jQuery and store it in a variable named animalImage.
+          var giphyImage = $("<img>");
+          giphyImage.attr("src", results[i].images.fixed_height.url);
+          // Set the image's src to results[i]'s fixed_height.url.
+          
+          //giphyDiv.append(p);
+          giphyDiv.append(giphyImage);
+          $("#gifs-appear-here").prepend(giphyDiv);
+
+          
+        }
+
+      });
+    });
+  }
+    $(document).on("click", ".giph", displayGiphy);
+    renderButtons();
+  </script>
 </body>
+
 </html>
