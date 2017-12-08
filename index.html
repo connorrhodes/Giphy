@@ -33,6 +33,7 @@
 
         a.addClass("giph");
         a.attr("data-name", giphys[i]);
+        //a.attr("data-state", giphy[i]);
         a.text(giphys[i]);
 
         $("#buttons-view").append(a);
@@ -40,19 +41,21 @@
       }
 
   }
-  $(".gif").on("click", function(){
+  $('body').on("click", '.gif', function(){
+//<img src="https://media1.giphy.com/media/3o85xkQpyMlnBkpB9C/200_s.gif" data-still="https://media1.giphy.com/media/3o85xkQpyMlnBkpB9C/200_s.gif" data-animate="https://media1.giphy.com/media/3o85xkQpyMlnBkpB9C/200.gif" data-state="still" class="gif">
+    var src = $(this).attr("src");
+    if($(this).hasClass('playing')){
+      //stop
 
-    var state = $(this).attr("data-state");
-    if(state === "still"){
-
-      var imgAnimate = $(this).attr("data-animate");
-      $(this).attr("src", imgAnimate);
-      $(this).attr("data-state", "animate");
+     
+      $(this).attr('src', src.replace(/\.gif/i, "_s.gif"))
+      $(this).removeClass('playing');
 
     } else {
-      var imgStill = $(this).attr("data-still");
-      $(this).attr("src", imgStill);
-      $(this).attr("data-state", "still");
+      //play
+      
+      $(this).addCLass('playing');
+      $(this).attr('src', src.replace(/\_s.gif/i, ".gif"))
     }
 
   });
@@ -82,7 +85,7 @@
       //Giphy API Key: fztxG0KlQX7hLnL5u3Fkvo7kmHbyyDeq
       var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
         giphy + "&api_key=fztxG0KlQX7hLnL5u3Fkvo7kmHbyyDeq&limit=10";
-
+      $("#gifs-appear-here").empty();
       $.ajax({
         url: queryURL,
         method: "GET"
@@ -109,8 +112,8 @@
           // Set the inner text of the paragraph to the rating of the image in results[i].
 
           // Make an image tag with jQuery and store it in a variable named animalImage.
-          var giphyImage = $("<img>");
-          giphyImage.attr("src", results[i].images.fixed_height.url);
+          var giphyImage = $("<img class='gif'>");
+          giphyImage.attr("src", results[i].images.fixed_height_still.url);
           // Set the image's src to results[i]'s fixed_height.url.
           
           //giphyDiv.append(p);
