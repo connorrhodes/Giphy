@@ -7,18 +7,14 @@
 </head>
 
 <body>
-  <div id="buttons-view">
-    <button data-name="cat">meow</button>
-    <button data-name="dog">woof</button>
-    <button data-name="bird">chirp</button>
-    <button data-name="falcon">Falcon</button>
-  </div>
+  <div class="row text-center tag-row" id="buttons-view"></div>
   <label for="search-input">Search for a giphy</label>
   <input type="text" id="search-input">
   <br>
 
   <input id="add-giphy" type="submit" value="Giphy Search">
-  <div id="gifs-appear-here">
+  <div class="container">
+    <div id="gifs-appear-here"></div>
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script type="text/javascript">
@@ -27,38 +23,37 @@
     function renderButtons() {
       $("#buttons-view").empty();
 
-      for (var i = 0; i < giphys.length; i++){
+      for (var i = 0; i < giphys.length; i++) {
 
         var a = $("<button>");
 
         a.addClass("giph");
         a.attr("data-name", giphys[i]);
-        //a.attr("data-state", giphy[i]);
         a.text(giphys[i]);
 
         $("#buttons-view").append(a);
 
       }
 
-  }
-  $('body').on("click", '.gif', function(){
-//<img src="https://media1.giphy.com/media/3o85xkQpyMlnBkpB9C/200_s.gif" data-still="https://media1.giphy.com/media/3o85xkQpyMlnBkpB9C/200_s.gif" data-animate="https://media1.giphy.com/media/3o85xkQpyMlnBkpB9C/200.gif" data-state="still" class="gif">
-    var src = $(this).attr("src");
-    if($(this).hasClass('playing')){
-      //stop
-
-     
-      $(this).attr('src', src.replace(/\.gif/i, "_s.gif"))
-      $(this).removeClass('playing');
-
-    } else {
-      //play
-      
-      $(this).addCLass('playing');
-      $(this).attr('src', src.replace(/\_s.gif/i, ".gif"))
     }
+    $('body').on("click", '.gif', function () {
+      //<img src="https://media1.giphy.com/media/3o85xkQpyMlnBkpB9C/200_s.gif" data-still="https://media1.giphy.com/media/3o85xkQpyMlnBkpB9C/200_s.gif" data-animate="https://media1.giphy.com/media/3o85xkQpyMlnBkpB9C/200.gif" data-state="still" class="gif">
+      var src = $(this).attr("src");
+      if ($(this).hasClass('playing')) {
+        //stop
 
-  });
+
+        $(this).attr('src', src.replace(/\.gif/i, "_s.gif"))
+        $(this).removeClass('playing');
+
+      } else {
+        //play
+
+        $(this).addClass('playing');
+        $(this).attr('src', src.replace(/\_s.gif/i, ".gif"))
+      }
+
+    });
 
 
 
@@ -66,7 +61,7 @@
 
       // Preventing the submit button from trying to submit the form
       // We're optionally using a form so the user may hit Enter to search instead of clicking the button
-      //event.preventDefault();
+      event.preventDefault();
       var querySearch = "https://api.giphy.com/v1/gifs/search?api_key=fztxG0KlQX7hLnL5u3Fkvo7kmHbyyDeq&q=&limit=9&offset=0&rating=G&lang=en";
       // Here we grab the text from the input box
       var giphyS = $("#search-input").val();
@@ -76,56 +71,57 @@
       giphys.push(giphyS);
 
       //var searchDiv = $("<div class='search'>");
-        renderButtons();
+      renderButtons();
 
     });
-    function displayGiphy(){
-    $("button").on("click", function () {
-      var giphy = $(this).attr("data-name");
-      //Giphy API Key: fztxG0KlQX7hLnL5u3Fkvo7kmHbyyDeq
-      var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
-        giphy + "&api_key=fztxG0KlQX7hLnL5u3Fkvo7kmHbyyDeq&limit=10";
-      $("#gifs-appear-here").empty();
-      $.ajax({
-        url: queryURL,
-        method: "GET"
-      }).done(function (response) {
-        // Step 1: Run this file, click a button, and see what the response object looks like in the browser's console.
-        // Open up the data key, then open up the 0th, element. Study the keys and how the JSON is structured.
+    function displayGiphy() {
+      $("button").on("click", function () {
+        var giphy = $(this).attr("data-name");
+        //Giphy API Key: fztxG0KlQX7hLnL5u3Fkvo7kmHbyyDeq
+        var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+          giphy + "&api_key=fztxG0KlQX7hLnL5u3Fkvo7kmHbyyDeq&limit=10";
+        $("#gifs-appear-here").empty();
+        $.ajax({
+          url: queryURL,
+          method: "GET"
+        }).done(function (response) {
 
-        console.log(response);
+          console.log(response);
 
-        
 
-        var results = response.data;
 
-        // ========================
+          //var results = response.data;
 
-        for (var i = 0; i < results.length; i++) {
+          // ========================
 
-          
-          //var rating = results[i].rating;
-          // Make a div with jQuery and store it in a variable named animalDiv.
-          var giphyDiv = $("<div class='item'>");
-          // Make a paragraph tag with jQuery and store it in a variable named p.
-          //var p = $("<p>").text("Rating: " + rating);
-          // Set the inner text of the paragraph to the rating of the image in results[i].
+          for (var i = 0; i < response.data.length; i++) {
 
-          // Make an image tag with jQuery and store it in a variable named animalImage.
-          var giphyImage = $("<img class='gif'>");
-          giphyImage.attr("src", results[i].images.fixed_height_still.url);
-          // Set the image's src to results[i]'s fixed_height.url.
-          
-          //giphyDiv.append(p);
-          giphyDiv.append(giphyImage);
-          $("#gifs-appear-here").prepend(giphyDiv);
 
-          
-        }
+            //var rating = results[i].rating;
+            $("#gifs-appear-here").append('<img class="gif" src="' +
+              response.data[i].images.fixed_height_still.url + '">');
+
+
+
+            // var giphyDiv = $("<div class='item'>");
+
+            // var giphyImage = $("<img class='gif'>");
+            // giphyImage.attr("src", results[i].images.fixed_height_still.url);
+
+
+            // //giphyDiv.append(p);
+            // giphyDiv.append(giphyImage);
+            // $("#gifs-appear-here").prepend(giphyDiv);
+
+
+          }
+
+        });
+
+        //$("#gifs-appear-here").empty();
 
       });
-    });
-  }
+    }
     $(document).on("click", ".giph", displayGiphy);
     renderButtons();
   </script>
